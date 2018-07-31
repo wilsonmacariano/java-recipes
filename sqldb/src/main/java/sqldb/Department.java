@@ -1,16 +1,16 @@
 package sqldb;
 
-public class Departament {
+public class Department {
 
     private Integer id;
     private String name;
 
-    public Departament(Integer id, String name) {
+    public Department(Integer id, String name) {
         this(name);
         this.id = id;
     }
 
-    public Departament(String name) {
+    public Department(String name) {
         this.name = name;
     }
 

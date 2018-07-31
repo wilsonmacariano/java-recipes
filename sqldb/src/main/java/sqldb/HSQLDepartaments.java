@@ -5,23 +5,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HSQLDepartaments extends DatabaseCrud<Departament> {
+public class HSQLDepartaments extends DatabaseCrud<Department> {
 
     public HSQLDepartaments(DataSource dataSource) {
         super(dataSource);
     }
 
     @Override
-    public Departament add(Departament departament) {
+    public Department add(Department department) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "INSERT INTO DEPARTAMENT (NAME) VALUES (?)",
                      Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, departament.getName());
+            statement.setString(1, department.getName());
             statement.executeUpdate();
             conn.commit();
-            return new Departament(generatedId(statement),
-                    departament.getName());
+            return new Department(generatedId(statement),
+                    department.getName());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -29,16 +29,16 @@ public class HSQLDepartaments extends DatabaseCrud<Departament> {
 
 
     @Override
-    public List<Departament> all() {
+    public List<Department> all() {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(
                      "SELECT ID, NAME FROM DEPARTAMENT")) {
             ResultSet result = statement.executeQuery();
-            final List<Departament> departaments = new ArrayList<>();
+            final List<Department> departments = new ArrayList<>();
             while (result.next())
-                departaments.add(new Departament(result.getInt("ID"),
+                departments.add(new Department(result.getInt("ID"),
                         result.getString("NAME")));
-            return departaments;
+            return departments;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

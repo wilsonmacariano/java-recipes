@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 
 public class Main {
 
@@ -22,30 +21,37 @@ public class Main {
         insertSomePersons(persons);
         queryAllPersons(persons);
 
-        Crud<Departament> departaments = new HSQLDepartaments(dataSource);
-        insertSomeDepartaments(departaments);
-        queryAllDepartaments(departaments);
+        Crud<Department> departments = new HSQLDepartaments(dataSource);
+        insertSomeDepartaments(departments);
+        queryAllDepartaments(departments);
     }
 
 
     private static void queryAllPersons(Crud<Person> persons) {
-        persons.all().forEach(p -> System.out.println(p.getName()));
+        persons.all()
+                .stream()
+                .map(Person::getName)
+                .forEach(System.out::println);
     }
 
     private static void insertSomePersons(Crud<Person> persons) {
-        List<Person> personsToBeRegistered = Arrays.asList(new Person("Wilson"),
-                new Person("Heitor"), new Person("Eveline"));
-        personsToBeRegistered.forEach(p -> persons.add(p));
+        Arrays.asList(new Person("Wilson"),
+                new Person("Heitor"),
+                new Person("Eveline"))
+                .forEach(persons::add);
     }
 
-    private static void insertSomeDepartaments(Crud<Departament> departaments) {
-        List<Departament> departamentsToBeAdded = Arrays.asList(new Departament("Security"),
-                new Departament("IT"));
-        departamentsToBeAdded.forEach(d -> departaments.add(d));
+    private static void insertSomeDepartaments(Crud<Department> departments) {
+        Arrays.asList(new Department("Security"),
+                new Department("IT"))
+                .forEach(departments::add);
     }
 
-    private static void queryAllDepartaments(Crud<Departament> departaments) {
-        departaments.all().forEach(p -> System.out.println(p.getName()));
+    private static void queryAllDepartaments(Crud<Department> departments) {
+        departments.all()
+                .stream()
+                .map(Department::getName)
+                .forEach(System.out::println);
     }
 
     private static void dropTables(DataSource dataSource) throws SQLException {
